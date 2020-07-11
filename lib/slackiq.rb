@@ -56,12 +56,12 @@ class Slackiq
       {
         title: title,
         value: status.description,
-        short: true
+        short: false
       },
       {
         title: "Batch ID",
         value: status.bid,
-        short: true
+        short: false
       },
       {
         title: "Created",
