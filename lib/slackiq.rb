@@ -11,12 +11,13 @@ class Slackiq
 
   # @param options [Hash]
   def self.notify(options)
-    new(options).execute
+    raise "Need to run Slackiq.configure first" if @webhook_urls.nil?
+    new(options.merge(webhook_urls: @webhook_urls)).execute
   end
 
   # @param options [Hash]
   def self.configure(webhook_urls={})
-    @@webhook_urls = webhook_urls
+    @webhook_urls = webhook_urls
   end
 
   # @param options [Hash]
@@ -115,7 +116,7 @@ class Slackiq
 
   # @param data [Hash]
   private def http_post(data)
-    url  = @@webhook_urls[options[:webhook_name]]
+    url  = options[:webhook_urls].fetch(options[:webhook_name])
     uri  = URI.parse(url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.port == 443
@@ -187,6 +188,6 @@ class Slackiq
 
   # @param time [DateTime]
   private def time_format(time)
-    time.strftime("%D @ %H:%M:%S %P")
+    time.strftime("%D @ %I:%M:%S %P")
   end
 end
