@@ -1,11 +1,11 @@
+require "slackiq/version"
+
 require "net/http"
 require "uri"
 require "json"
 require "date"
 
 class Slackiq
-
-  VERSION = "1.2.1".freeze
 
   attr_reader :options
 
