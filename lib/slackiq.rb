@@ -42,12 +42,11 @@ class Slackiq
 
     return if status.nil?
 
-    color = options[:color] || color_for(status)
+    color      = options[:color] || color_for(status)
 
-    duration  = elapsed_time_humanized(status.created_at, time_now)
-    time_now_title = (status.complete? ? "Completed" : "Now")
-
-    jobs_run = status.total - status.pending
+    duration   = elapsed_time_humanized(status.created_at, time_now)
+    time_title = status.complete? ? "Completed" : "Now"
+    jobs_run   = status.total - status.pending
 
     completion_percentage = percentage(jobs_run        / status.total.to_f)
     failure_percentage    = percentage(status.failures / status.total.to_f)
@@ -69,7 +68,7 @@ class Slackiq
         short: true
       },
       {
-        title: time_now_title,
+        title: time_title,
         value: time_format(time_now),
         short: true
       },
@@ -159,7 +158,10 @@ class Slackiq
   # @param t0 [DateTime]
   # @param t1 [DateTime]
   private def elapsed_time_humanized(t0, t1, precision: 2)
-    time_humanize(elapsed_seconds(t0, t1))
+    time_humanize(
+      elapsed_seconds(t0, t1, precision: precision),
+      precision: precision
+    )
   end
 
   # @param t0 [DateTime]
@@ -172,13 +174,13 @@ class Slackiq
 
   # http://stackoverflow.com/questions/4136248/how-to-generate-a-human-readable-time-range-using-ruby-on-rails
   # @param secs [Integer]
-  private def time_humanize(secs)
+  private def time_humanize(secs, precision: 2)
     [[60, :s], [60, :m], [24, :h], [1000, :d]].map do |count, name|
       if secs > 0
         secs, n = secs.divmod(count)
         if name == :s
           num = n.to_f == n.to_i ? n.to_i : n.to_f
-          "%.2f#{name}" % [num]
+          "%.#{precision}f#{name}" % num
         else
           "#{n.to_i}#{name}"
         end
