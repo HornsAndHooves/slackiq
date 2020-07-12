@@ -1,3 +1,3 @@
-module Slackiq
-  VERSION = "1.2.1"
+class Slackiq
+  VERSION = "1.2.1".freeze
 end

@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "slackiq/version"
 
@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.executables   = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "httparty"
   s.add_development_dependency "bundler"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
